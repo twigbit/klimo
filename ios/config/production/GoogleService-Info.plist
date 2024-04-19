@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1033066123690-9ibrfgl4766sg8mu6g6dpfp0gn99tv94.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1033066123690-9ibrfgl4766sg8mu6g6dpfp0gn99tv94</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1033066123690-1kis1ki8pfhm65k6osorpbo43g9k56ql.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCJsKyr9TnzA9h0Ll5M8TOnhUr4VI38GHU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1033066123690</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>app.klimo</string>
+	<key>PROJECT_ID</key>
+	<string>klimo-58d29</string>
+	<key>STORAGE_BUCKET</key>
+	<string>klimo-58d29.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1033066123690:ios:43551d79e4e3af29511bd3</string>
+</dict>
+</plist>

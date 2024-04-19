@@ -1,0 +1,123 @@
+# Automatically generated on 2022-03-25 UTC from https://codemagic.io/app/623db1d2971f58a5a4afc369/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    max_build_duration: 120
+    environment:
+      vars:
+        FCI_KEYSTORE_PATH: /tmp/keystore.keystore
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      groups:
+        - Android Signing
+        - Google Play
+        - App Store
+    cache:
+      cache_paths:
+        - $FCI_BUILD_DIR/android/.gradle
+        - $FCI_BUILD_DIR/ios/Pods
+        - $HOME/Library/Caches/CocoaPods
+        - $HOME/.gradle/caches
+        - $FLUTTER_ROOT/.pub-cache
+    triggering:
+      events:
+        - tag
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+        - pattern: development
+          include: true
+          source: true
+        - pattern: release
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: '*.*.*+*'
+          include: true
+    scripts:
+      - |
+        # set up key.properties
+        echo $FCI_KEYSTORE | base64 --decode > $FCI_KEYSTORE_PATH
+        cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
+        storePassword=$FCI_KEYSTORE_PASSWORD
+        keyPassword=$FCI_KEY_PASSWORD
+        keyAlias=$FCI_KEY_ALIAS
+        storeFile=/tmp/keystore.keystore
+        EOF
+      - |
+        # set up local properties
+        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - |
+        cd packages/datamodels
+        flutter pub get
+        flutter pub run build_runner build
+      - flutter packages pub get
+      - flutter config --enable-web
+      - echo $RELEASE_NAME
+      - echo $RELEASE_NUMBER
+      - |
+        RELEASE_NAME=$(echo $CM_TAG | cut -d + -f 1)
+        RELEASE_NUMBER=$(echo $CM_TAG | cut -d + -f 2)
+        flutter build appbundle --flavor production --dart-define app.flavor=production --release --build-number=$RELEASE_NUMBER --build-name=$RELEASE_NAME
+      - |
+        # generate signed universal apk with user specified keys
+        android-app-bundle build-universal-apk \
+          --bundle build/**/outputs/**/*.aab \
+          --ks $FCI_KEYSTORE_PATH \
+          --ks-pass $FCI_KEYSTORE_PASSWORD \
+          --ks-key-alias $FCI_KEY_ALIAS \
+          --key-pass $FCI_KEY_PASSWORD
+      - find . -name "Podfile" -execdir pod install \;
+      - keychain initialize
+      - app-store-connect fetch-signing-files "app.klimo" --type IOS_APP_STORE --create
+      - keychain add-certificates
+      - xcode-project use-profiles
+      - |
+        RELEASE_NAME=$(echo $CM_TAG | cut -d + -f 1)
+        RELEASE_NUMBER=$(echo $CM_TAG | cut -d + -f 2)
+        flutter build ipa --flavor production --dart-define app.flavor=production --export-options-plist=/Users/builder/export_options.plist --build-number=$RELEASE_NUMBER --build-name=$RELEASE_NAME
+      - |
+        # build web
+        flutter build web --flavor production --dart-define app.flavor=production --release  
+        cd build/web
+        7z a -r ../web.zip ./*
+    artifacts:
+      - build/**/outputs/apk/**/*.apk
+      - build/**/outputs/bundle/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - build/web.zip
+      - '*.snap'
+      - build/windows/**/*.msix
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - morgenroth@twigbit.com
+      slack:
+        channel: '#klimo-ci'
+        notify_on_build_start: true
+      google_play: # For Android app
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS # Contents of the JSON key file for Google Play service account saved as a secure environment variable
+        track: beta # Name of the track internal, alpha, beta, production, internal app sharing, or your custom track name
+      app_store_connect: # For iOS or macOS app
+        # For authenticating with App Store Connect and uploading the IPA to App Store Connect (required)
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY # Contents of the API key saved as a secure environment variable
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER # Alphanumeric value that identifies the API key, can also reference environment variable such as $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID # Alphanumeric value that identifies who created the API key, can also reference environment variable such as $APP_STORE_CONNECT_ISSUER_ID
+        
+        # Configuration related to TestFlight (optional)
+        submit_to_testflight: true # Optional boolean, defaults to false. Whether or not to submit the uploaded build to TestFlight beta review. Required for distributing to beta groups. Note: This action is performed during post-processing.
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - Beta
+          - Public
+        
+        # Configuration related to App Store (optional)
+        submit_to_app_store: true # Optional boolean, defaults to false. Whether or not to submit the uploaded build to App Store review. Note: This action is performed during post-processing.
+        release_type: MANUAL # Optional, defaults to MANUAL. Supported values: MANUAL, AFTER_APPROVAL or SCHEDULED
+        copyright: 2022 twigbit technologies GmbH # Optional. The name of the person or entity that owns the exclusive rights to your app, preceded by the year the rights were obtained.

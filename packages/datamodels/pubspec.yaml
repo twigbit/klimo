@@ -1,0 +1,18 @@
+name: klimo_datamodels
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  built_collection: ^5.1.1
+  built_value: ^8.1.2
+  cloud_firestore: ^4.0.5
+
+
+dev_dependencies:
+  test: ^1.17.12
+  mockito: ^5.0.16
+  build_runner: any
+  built_value_generator: ^8.1.2
+  lints: ^2.0.0

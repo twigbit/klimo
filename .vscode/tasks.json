@@ -1,0 +1,36 @@
+{
+	"version": "2.0.0",
+	// "tasks": [
+	// 	{
+	// 		"label": "packages/datamodels: build_runner build",
+	// 		"type": "flutter",
+	// 		"command": "flutter",
+	// 		"args": [
+	// 			"pub",
+	// 			"run",
+	// 			"build_runner",
+	// 			"build"
+	// 		],
+	// 		"problemMatcher": {
+	// 			"owner": "build_runner",
+	// 			"fileLocation": ["relative", "${workspaceFolder}/packages/datamodels"],
+	// 			"pattern": [
+	// 				{
+	// 					"kind": "file",
+	// 					"regexp": "^\\[(SEVERE)\\] ([^\\s]*) on ([^\\s]*)",
+	// 					"severity": 1,
+	// 					"code": 2,
+	// 					"file": 3
+	// 				},
+	// 				{
+	// 					"regexp": "^([^\\[]*)$",
+	// 					"message": 1
+	// 				}
+	// 			]
+	// 		},
+	// 		"options": {
+	// 			"cwd": "./packages/datamodels"
+	// 		}
+	// 	}
+	// ]
+}

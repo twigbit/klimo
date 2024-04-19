@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1033066123690",
+    "project_id": "klimo-58d29",
+    "storage_bucket": "klimo-58d29.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033066123690:android:c87574953d3df9ec511bd3",
+        "android_client_info": {
+          "package_name": "app.klimo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033066123690-1kis1ki8pfhm65k6osorpbo43g9k56ql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.klimo",
+            "certificate_hash": "16057739a213f9ecf30d905ffed77b7bbea5c774"
+          }
+        },
+        {
+          "client_id": "1033066123690-k8ud6uha710o6fd7d71p9vc7s0e5d2il.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcXC3Xb6f8jkhZRDkMlnV38c0uEaMKvOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033066123690-k8ud6uha710o6fd7d71p9vc7s0e5d2il.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1033066123690-1cgklkhbsscs1vknrfg6krqn0agpdl80.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.twigbit.klimo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

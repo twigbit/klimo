@@ -1,0 +1,67 @@
+---
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+
+stages:
+  - lint
+  - deploy
+
+lint_flutter:
+  stage: lint
+  image: cirrusci/flutter:3.0.1
+  before_script:
+    - flutter pub get
+    - pushd packages/datamodels
+    - flutter pub get
+    - flutter pub run build_runner build 
+    - popd
+  script:
+    - flutter analyze
+  rules:
+    - changes:
+        - "*.dart"
+
+lint_firebase:
+  stage: lint
+  image: node:16
+  before_script:
+    - node -v
+    - npm -v
+  script:
+    - cd firebase/functions
+    - npm ci
+    - npm run lint
+    - npm run build -- --noEmit
+  rules:
+    - changes:
+        - "firebase/**/*"
+
+deploy_firebase:
+  stage: deploy
+  image: node:16
+  variables:
+    FIREBASE_PROJECT: ""
+  before_script:
+    - cd firebase/functions
+    - npm i -g firebase-tools
+    - npm ci
+  script:
+    - echo Deploying to Firebase Project \"$FIREBASE_PROJECT\"
+    - firebase deploy --token $FIREBASE_TOKEN --project $FIREBASE_PROJECT
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        FIREBASE_PROJECT: "production"
+      when: manual
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - "firebase/**/*"
+      variables:
+        FIREBASE_PROJECT: "preview"

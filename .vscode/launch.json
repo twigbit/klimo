@@ -1,0 +1,59 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "klimo",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--flavor",
+                "preview",
+                "--dart-define",
+                "app.flavor=preview",
+            ]
+        },
+        {
+            "name": "klimo (production)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--flavor",
+                "production",
+                "--dart-define",
+                "app.flavor=production",
+            ]
+        },
+        {
+            "name": "klimo (emulators)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--flavor",
+                "preview",
+                "--dart-define",
+                "app.flavor=preview",
+                "--dart-define",
+                "app.emulators=true"
+            ]
+        },
+        {
+            "name": "klimo (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "profile",
+            "toolArgs": [
+                "--flavor",
+                "preview",
+                "--dart-define",
+                "app.flavor=preview",
+            ]
+        }
+    ]
+}
